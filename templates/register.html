@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>Demo Form</title>
+  <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+
+<div class="container"><br>
+  <h2>Flask Multi Step Form</h2>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-warning" role="alert">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<div class=container"><br>
+  <div class="row align-items-center justify-content-center">
+    <div class="col-md-4">
+
+      <form method="POST" action={{ next_form }}>
+        {{ form.csrf_token }}
+        {% for form_part in form %}
+
+          <li>{{ form_part.label }} {{ form_part }}</li>
+        {% endfor %}
+
+        <input type="submit" value="Go">
+      </form>
+
+    </div>
+    <br>
+  </div>
+</div>
+</body>
+</html>
