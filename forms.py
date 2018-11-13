@@ -1,8 +1,6 @@
-from flask_wtf import FlaskForm
-from wtforms import Form, BooleanField, StringField, PasswordField, validators
+from wtforms import Form, StringField, PasswordField, validators
 from wtforms import ValidationError
 import phonenumbers
-
 
 
 class RegistrationForm(Form):
@@ -13,7 +11,6 @@ class RegistrationForm(Form):
         validators.EqualTo('confirm', message='Passwords must match')
     ])
     phone = StringField('Phone', validators=[validators.DataRequired()])
-
 
     def validate_phone(form, field):
         if len(field.data) > 16:
@@ -26,6 +23,7 @@ class RegistrationForm(Form):
             input_number = phonenumbers.parse("+1" + field.data)
             if not (phonenumbers.is_valid_number(input_number)):
                 raise ValidationError('Invalid phone number.')
+
 
 class AdditionalInformation(Form):
     first_name = StringField('First Name', [validators.Length(min=4, max=25)])

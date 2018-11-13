@@ -1,9 +1,12 @@
 from flask import Flask, request, render_template, flash
 from forms import RegistrationForm, AdditionalInformation
+from wtforms import Form
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
-def flash_errors(form):
+
+
+def flash_errors(form: Form):
     """Flashes form errors"""
     for field, errors in form.errors.items():
         for error in errors:
@@ -12,7 +15,8 @@ def flash_errors(form):
                 error
             ), 'error')
 
-def select_form(step):
+
+def select_form(step: int):
     if step == 1:
         return RegistrationForm
     if step == 2:
@@ -21,10 +25,9 @@ def select_form(step):
 
 @app.route('/register/<int:step>', methods=['GET', 'POST'])
 def register(step: int):
-
     if request.method == 'POST':
-        temp_form = select_form(step - 1)(request.form)
-        if(temp_form.validate()):
+        temp_form: Form = select_form(step - 1)(request.form)
+        if (temp_form.validate()):
             multi_dict = request.args
             for key in multi_dict:
                 print(multi_dict.get(key))
