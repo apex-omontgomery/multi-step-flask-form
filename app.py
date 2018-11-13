@@ -26,20 +26,24 @@ def select_form(step: int):
 @app.route('/register/<int:step>', methods=['GET', 'POST'])
 def register(step: int):
     if request.method == 'POST':
-        temp_form: Form = select_form(step - 1)(request.form)
-        if (temp_form.validate()):
+        current_form: Form = select_form(step - 1)(request.form)
+        if (current_form.validate()):
             multi_dict = request.args
             for key in multi_dict:
                 print(multi_dict.get(key))
                 print(multi_dict.getlist(key))
+            SelectedForm = select_form(step)
+            form = SelectedForm(request.form)
+
+            return render_template('register.html', form=form, next_form=f'/register/{step+1}')
         else:
-            print(temp_form)
-            flash_errors(temp_form)
+            flash_errors(current_form)
+            return render_template('register.html', form=current_form, next_form=f'/register/{step}')
 
     SelectedForm = select_form(step)
-    form = SelectedForm(request.form)
+    first_form = SelectedForm(request.form)
 
-    return render_template('register.html', form=form, next_form=f'/register/{step+1}')
+    return render_template('register.html', form=first_form, next_form=f'/register/{step+1}')
 
 
 if __name__ == '__main__':
