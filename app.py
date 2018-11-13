@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, flash
+from flask import Flask, request, render_template, flash, redirect
 from forms import RegistrationForm, AdditionalInformation
 from wtforms import Form
 
@@ -21,6 +21,12 @@ def select_form(step: int):
         return RegistrationForm
     if step == 2:
         return AdditionalInformation
+    raise KeyError('End of Form')
+
+
+@app.route('/register_success', methods=['GET', 'POST'])
+def register_done():
+    return render_template('register_done.html')
 
 
 @app.route('/register/<int:step>', methods=['GET', 'POST'])
@@ -28,12 +34,12 @@ def register(step: int):
     if request.method == 'POST':
         current_form: Form = select_form(step - 1)(request.form)
         if (current_form.validate()):
-            multi_dict = request.args
-            for key in multi_dict:
-                print(multi_dict.get(key))
-                print(multi_dict.getlist(key))
-            SelectedForm = select_form(step)
-            form = SelectedForm(request.form)
+
+            try:
+                SelectedForm = select_form(step)
+                form = SelectedForm(request.form)
+            except KeyError:
+                return redirect('/register_success')
 
             return render_template('register.html', form=form, next_form=f'/register/{step+1}')
         else:
