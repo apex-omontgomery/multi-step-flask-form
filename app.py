@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, flash, redirect
-from forms import RegistrationForm, AdditionalInformation
+from forms import RegistrationForm, AdditionalInformation, MultiStepForm
 from wtforms import Form
 
 app = Flask(__name__)
@@ -16,41 +16,34 @@ def flash_errors(form: Form):
             ), 'error')
 
 
-def select_form(step: int):
-    if step == 1:
-        return RegistrationForm
-    if step == 2:
-        return AdditionalInformation
-    raise KeyError('End of Form')
-
-
 @app.route('/register_success', methods=['GET', 'POST'])
 def register_done():
     return render_template('register_done.html')
 
 
-@app.route('/register/<int:step>', methods=['GET', 'POST'])
-def register(step: int):
-    if request.method == 'POST':
-        current_form: Form = select_form(step - 1)(request.form)
-        if (current_form.validate()):
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    multi_form = MultiStepForm(forms=[RegistrationForm, AdditionalInformation])
 
+    if request.method == 'POST':
+        current_form: Form = multi_form[request.form]
+
+        if current_form.validate():
             try:
-                SelectedForm = select_form(step)
-                form = SelectedForm(request.form)
+                next_form = multi_form.step(request.form)
+
             except KeyError:
                 return redirect('/register_success')
 
-            return render_template('register.html', form=form, next_form=f'/register/{step+1}')
+            return render_template('register.html', form=next_form)
         else:
             flash_errors(current_form)
-            return render_template('register.html', form=current_form, next_form=f'/register/{step}')
+            return render_template('register.html', form=current_form)
 
-    SelectedForm = select_form(step)
-    first_form = SelectedForm(request.form)
+    first_form = multi_form.first()
 
-    return render_template('register.html', form=first_form, next_form=f'/register/{step+1}')
+    return render_template('register.html', form=first_form)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

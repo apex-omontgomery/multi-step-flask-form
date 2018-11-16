@@ -1,0 +1,54 @@
+* {
+  box-sizing: border-box;
+  font-family: "Merriweather Sans", sans-serif;
+}
+
+body {
+  background-color: #B0DBEE;
+}
+
+body #form {
+
+  background-color: #009EDF;
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.75);
+}
+
+.form-group label {
+  color: white;
+}
+
+body #form .form-group label {
+  font-weight: bold;
+  font-size: 0.9em;
+}
+
+body #form .form-group .input-group {
+  border-radius: 5px;
+  -webkit-box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.35);
+  -moz-box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.35);
+  box-shadow: -1px 3px 18px 0px rgba(0, 0, 0, 0.35);
+}
+
+/*body #form .form-group .input-group .input-group-addon {*/
+/*border: none;*/
+/*border-right: 1px solid rgba(0, 0, 0, 0.2);*/
+/*}*/
+
+textarea {
+  resize: horizontal;
+  max-width: 100%;
+  min-width: 200px;
+}
+
+textarea {
+  resize: vertical;
+  max-height: 400px;
+  min-height: 100px;
+}
+
+.top-buffer {
+  margin-top: 20px;
+}

@@ -1,16 +1,23 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>Demo Form</title>
-  <link rel="stylesheet" media="screen" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='register.css') }}">
 </head>
 <body>
 
-<div class="container"><br>
-  <h2>Flask Multi Step Form</h2>
-</div>
 
 {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -20,23 +27,31 @@
   {% endif %}
 {% endwith %}
 
-<div class=container"><br>
-  <div class="row align-items-center justify-content-center">
-    <div class="col-md-4">
 
-      <form method="POST" action={{ next_form }}>
-        {{ form.csrf_token }}
-        {% for form_part in form %}
 
-          <li>{{ form_part.label }} {{ form_part }}</li>
-        {% endfor %}
+<div class="container">
+  <div class="col-xs-12 ">
+    <form id="form" class="form-vertical" role="form" action="/register" method="post">
+      {{ form.csrf_token }}
+      {% for form_part in form %}
+        <div class="form-group">
+          {{ form_part.label }}
+          <br>
+          <div class="input-group">
+{#            <div class="input-group-addon">#}
+{#              <span class="fa fa-user"></span>#}
+{#            </div>#}
+            {{ form_part(class_="form-control") }}
+          </div>
+        </div>
+      {% endfor %}
+      {{ form.multi_part_step }}
 
-        <input type="submit" value="Go">
-      </form>
-
-    </div>
-    <br>
+      <button type="submit" class="btn btn-default">Submit</button>
+    </form>
   </div>
+
 </div>
+
 </body>
 </html>
