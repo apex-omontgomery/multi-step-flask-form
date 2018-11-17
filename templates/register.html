@@ -30,7 +30,7 @@
 
 
 <div class="container">
-  <div class="col-xs-12 ">
+  <div class="col-xs-6">
     <form id="form" class="form-vertical" role="form" action="/register" method="post">
       {{ form.csrf_token }}
       {% for form_part in form %}
@@ -38,9 +38,9 @@
           {{ form_part.label }}
           <br>
           <div class="input-group">
-{#            <div class="input-group-addon">#}
-{#              <span class="fa fa-user"></span>#}
-{#            </div>#}
+            <div class="input-group-addon">
+              <span class="fa fa-user"></span>
+            </div>
             {{ form_part(class_="form-control") }}
           </div>
         </div>

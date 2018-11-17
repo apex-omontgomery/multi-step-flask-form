@@ -1,6 +1,7 @@
 from flask import Flask, request, render_template, flash, redirect
-from forms import RegistrationForm, AdditionalInformation, MultiStepForm
+from forms import RegistrationForm, AdditionalInformation, MultiStepForm, SomethingElse
 from wtforms import Form
+
 
 app = Flask(__name__)
 app.secret_key = 'super secret key'
@@ -23,26 +24,11 @@ def register_done():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    multi_form = MultiStepForm(forms=[RegistrationForm, AdditionalInformation])
-
-    if request.method == 'POST':
-        current_form: Form = multi_form[request.form]
-
-        if current_form.validate():
-            try:
-                next_form = multi_form.step(request.form)
-
-            except KeyError:
-                return redirect('/register_success')
-
-            return render_template('register.html', form=next_form)
-        else:
-            flash_errors(current_form)
-            return render_template('register.html', form=current_form)
-
-    first_form = multi_form.first()
-
-    return render_template('register.html', form=first_form)
+    multi_form = MultiStepForm(forms=[RegistrationForm, AdditionalInformation, SomethingElse],
+                               final_action=redirect('/register_success'),
+                               form_template='register.html')
+    thing = request
+    return multi_form.advance(request)
 
 
 if __name__ == '__main__':
